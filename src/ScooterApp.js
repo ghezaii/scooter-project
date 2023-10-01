@@ -9,9 +9,10 @@ class ScooterApp {
       station2 : [], 
       station3 : []
     };
-    this.registeredUsers = {};
-  }
+    this.registeredUsers = {
 
+    };
+  }
 
   registerUser(username, password, age) {
     if (!this.registeredUsers[username] && age >= 18) {
@@ -27,7 +28,6 @@ class ScooterApp {
   }
 
   loginUser(username, password) {
-    console.log(JSON.stringify(this.registeredUsers))
     if (this.registeredUsers[username]) {
       this.registeredUsers[username].login(password);
       console.log('user has been logged in');
@@ -37,15 +37,59 @@ class ScooterApp {
   }
 
   logoutUser(username) {
-    console.log(JSON.stringify(this.registeredUsers))
     if (this.registeredUsers[username]) {
       this.registeredUsers[username].logout();
       console.log('user is logged out');
   } else {
     throw new Error('no such user is logged in');
+    }
   }
-}
 
+  createScooter(station) {
+    if (!this.stations[station]) {
+      throw new Error('no such station error');
+    } else {
+      let scooter = new Scooter(station);
+      this.stations[station].push(scooter);
+      console.log('created new scooter');
+      return scooter;
+    }
+  }
+
+  dockScooter(scooter, station) {
+    if (!this.stations[station]) {
+      throw new Error('no such station error');
+    } else if (this.stations[station].includes(scooter)) {
+      throw new Error('scooter already at station');
+    } else {
+      scooter.dock(scooter);
+      this.stations[station].push(scooter);
+      return 'scooter is docked';
+    }
+  }
+
+  rentScooter(scooter, user) {
+    if (scooter.station == null) {
+      throw new Error('scooter already rented');
+    } else {
+      let availableScooters = this.stations[scooter.station];
+      let scooterIndex = 0;
+      for (let i = 0; i < availableScooters.length; i++) {
+        if (availableScooters[i] === scooter) {
+          scooterIndex = i;
+          break;
+        }
+      }
+      availableScooters.splice(scooterIndex, 1);
+      scooter.rent(user);
+    }
+  }
+
+  print() {
+    console.log(this.registeredUsers)
+    console.log(this.stations)
+  }
+  
 }
 
 module.exports = ScooterApp
