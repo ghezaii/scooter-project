@@ -27,6 +27,16 @@ describe('Scooter methods', () => {
     expect(scooter.user).toBe(user)
     expect(scooter.station).toBe(null)
   })
+  test('throw scooter needs to be charged error', () => {
+    scooter.charge = 10;
+    expect(() => {
+      scooter.rent(user)}).toThrow('scooter needs to be charged');
+  })
+  test('throw scooter is broken error', () => {
+    scooter.isBroken = true;
+    expect(() => {
+      scooter.rent(user)}).toThrow('scooter needs repair');
+  })
   
   //dock method
   test('dock scooter - set user to null', () => {

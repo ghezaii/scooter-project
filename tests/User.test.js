@@ -24,6 +24,10 @@ describe("User method tests", () => {
   test("login(password) should login user", () => {
     expect(user.login("test123")).toBe(true);
   })
+  test("incorrect password throws error", () => {
+    expect(() => {
+      user.login("test12")}).toThrow("incorrect password");
+    })
   // test logout
   test("logout() should logout user", () => {
     expect(user.logout()).toBe(false);
